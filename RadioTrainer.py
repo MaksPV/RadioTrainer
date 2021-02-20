@@ -11,34 +11,38 @@ type_of = "terminal"
 
 
 def update():
-	print("Проверка обновлений")
-	try:
-		upd = requests.get('https://raw.githubusercontent.com/MaksPV/PhysicalOS/master/last_version.txt')
+    print("Проверка обновлений")
+    try:
+        upd = requests.get('https://raw.githubusercontent.com/MaksPV/RadioTrainer/main/last_version.txt')
         upd_info = upd.text.splitlines()
         upd_vers = float(upd_info[0])
-
-		if upd_vers > version:
+        if upd_vers > version:
             print(f"""Найдено обновление
 {upd_info[0]}
 Изменения:
-{'\n'.join(upd_info[1:])}
+{'''
+'''.join(upd_info[1:])}
 Обновить?
 1 - Да, 2 - Нет""")
-			menu = input()
-			if menu == "1":
-				new_vers = requests.get('https://raw.githubusercontent.com/MaksPV/PhysicalOS/master/PhyOS.py')
-				with open("RadioTrainer.exe", "wb") as f:
-    				f.write(new_vers.content)
-    				f.close()
-    				return "exit"
-		elif upd_vers == version:
+            menu = input()
+            if menu == "1":
+                new_vers = requests.get('https://raw.githubusercontent.com/MaksPV/RadioTrainer/main/dist/RadioTrainer.exe')
+                with open("RadioTrainer.exe", "wb") as f:
+                    f.write(new_vers.content)
+                    f.close()
+                    return "exit"
+        elif upd_vers == version:
             print("Установлена последняя версия, вы прекрасны")
-		elif upd_vers < version:
+        elif upd_vers < version:
             print("Не хочешь попасть в команду RadioTrainer?")
-		else:
+        else:
             print("Ошибка, файл обновлений не найден")
-	except BaseException:
-		print("Нет интернета, попробуйте позже")
+    except BaseException:
+        print("Нет интернета, попробуйте позже")
+
+
+if update() == "exit":
+    exit()
 
 
 def encode_to_RusPhonk(text):
@@ -74,8 +78,8 @@ def encode_to_EngPhonk(text):
         except KeyError:
             res.append(j)
     return " ".join(res)
- 
- 
+
+
 def encode_to_dopust(text):
     res = []
     for i in text.split():
