@@ -199,6 +199,11 @@ else:
 
 bases = listdir(path="bases")
 
+print("""  _               ___                   
+ |_)  _.  _| o  _  | ._ _. o ._   _  ._ 
+ | \ (_| (_| | (_) | | (_| | | | (/_ |  
+                                        """)
+print(f"Версия: {str(version)}")
 print("Накалякал t.me/maksimushka для себя и товарищей из UG5R")
 print("большими буквами необязательно писать, 0 - выход")
 print()
