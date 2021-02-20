@@ -119,7 +119,27 @@ Dopust = {
     "Washington": "Whiskey",
     "Cristmass": "X-Ray",
     "Yokohama": "Yankee",
-    "Zanzibar": "Zulu"
+    "Zanzibar": "Zulu",
+    "Ноль": "0",
+    "Zero": "0",
+    "Один": "1",
+    "One": "1",
+    "Два": "2",
+    "Two": "2",
+    "Три": "3",
+    "Three": "3",
+    "Четыре": "4",
+    "Four": "4",
+    "Пять": "5",
+    "Five": "5",
+    "Шесть": "6",
+    "Six": "6",
+    "Семь": "7",
+    "Seven": "7",
+    "Восемь": "8",
+    "Eight": "8",
+    "Девять": "9",
+    "Nine": "9"
 }
  
  
@@ -139,18 +159,6 @@ def encode_to_RusPhonk(text):
         except KeyError:
             res.append(j)
     return " ".join(res)
- 
- 
-def decode_from_RusPhonk(code):
-    reverseRusPhonk = {v: k for k, v in RusPhonk.items()}
-    b = code.split(" ")
-    res = []
-    for i in b:
-        try:
-            res.append(reverseRusPhonk[i])
-        except KeyError:
-            res.append(i)
-    return "".join(res)
 
 
 def encode_to_EngPhonk(text):
@@ -158,7 +166,7 @@ def encode_to_EngPhonk(text):
     b = []
     for i in b1:
         try:
-            b.append(EngToRus[i])
+            b.append(EngPhonk[i])
         except KeyError:
             b.append(i)
     res = []
@@ -168,39 +176,6 @@ def encode_to_EngPhonk(text):
         except KeyError:
             res.append(j)
     return " ".join(res)
- 
- 
-def decode_from_EngPhonk(code):
-    reverseEngPhonk = {v: k for k, v in EngPhonk.items()}
-    b = code.split(" ")
-    res = []
-    for i in b:
-        try:
-            res.append(reverseEngPhonk[i])
-        except KeyError:
-            res.append(i)
-    return "".join(res)
- 
-    
-def encode_to_rus(text):
-    res = []
-    for i in text:
-        try:
-            res.append(EngToRus[i])
-        except KeyError:
-            res.append(i)
-    return "".join(res)
- 
- 
-def encode_to_eng(text):
-    RusToEng = {v: k for k, v in EngToRus.items()}
-    res = []
-    for i in text:
-        try:
-            res.append(RusToEng[i])
-        except KeyError:
-            res.append(i)
-    return "".join(res)
  
  
 def encode_to_dopust(text):
@@ -215,9 +190,9 @@ def encode_to_dopust(text):
 
 if "bases" not in listdir():
     mkdir("bases")
-    
 else:
-    print(listdir(path="bases"))
+    pass
+#    print(listdir(path="bases"))
 
 bases = listdir(path="bases")
 
@@ -251,7 +226,12 @@ print("1 - позывной -> русская фонетическая азбу�
 print("2 - позывной -> международная фонетическая азбука")
 print("3 - русская фонетическая азбука -> позывной")
 print("4 - международная фонетическая азбука -> позывной")
-mode = input()
+while True:
+    mode = input()
+    if mode in "12340":
+        break
+    else:
+        print("Неправильный ввод")
 
 time_s = time()
 true = 0
@@ -271,6 +251,12 @@ while True:
         poz1 = encode_to_RusPhonk(poz)
     elif mode == "2":
         poz1 = encode_to_EngPhonk(poz)
+    elif mode == "3":
+        poz1 = poz
+        poz = encode_to_RusPhonk(poz)
+    elif mode == "4":
+        poz1 = poz
+        poz = encode_to_EngPhonk(poz)
     
     print("Введите 0 для выхода и просмотра результатов")
     print(poz)
@@ -278,6 +264,8 @@ while True:
         answer = input().upper()
     elif mode == "1" or mode == "2":
         answer = encode_to_dopust(input().title())
+    elif mode == "3" or mode == "4":
+        answer = input().upper()
     
     if poz1 == answer:
         print("Правильно")
@@ -309,4 +297,3 @@ while True:
 
 print()
 input("Enter чтобы выйти")    
-
