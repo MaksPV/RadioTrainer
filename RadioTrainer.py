@@ -4,45 +4,11 @@ from os import listdir, mkdir
 from itertools import repeat
 from sys import exit
 from dicti import *
-import requests
-
-version = 1.0
-type_of = "terminal"
 
 
-def update():
-    print("Проверка обновлений")
-    try:
-        upd = requests.get('https://raw.githubusercontent.com/MaksPV/RadioTrainer/main/last_version.txt')
-        upd_info = upd.text.splitlines()
-        upd_vers = float(upd_info[0])
-        if upd_vers > version:
-            print(f"""Найдено обновление
-{upd_info[0]}
-Изменения:
-{'''
-'''.join(upd_info[1:])}
-Обновить?
-1 - Да, 2 - Нет""")
-            menu = input()
-            if menu == "1":
-                new_vers = requests.get('https://raw.githubusercontent.com/MaksPV/RadioTrainer/main/dist/RadioTrainer.exe')
-                with open("RadioTrainer.exe", "wb") as f:
-                    f.write(new_vers.content)
-                    f.close()
-                    return "exit"
-        elif upd_vers == version:
-            print("Установлена последняя версия, вы прекрасны")
-        elif upd_vers < version:
-            print("Не хочешь попасть в команду RadioTrainer?")
-        else:
-            print("Ошибка, файл обновлений не найден")
-    except BaseException:
-        print("Нет интернета, попробуйте позже")
-
-
-if update() == "exit":
-    exit()
+with open("files/last_version.txt", "r") as f:
+        now = f.read().splitlines()
+        version = float(now[0])
 
 
 def encode_to_RusPhonk(text):
