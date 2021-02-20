@@ -1,7 +1,11 @@
 from random import choice, randint
 from time import time
 from os import listdir, mkdir
+from itertools import repeat
+from sys import exit
 
+version = 1.0
+type_of = "terminal"
 
 RusPhonk = {
     "a": "Анна",
@@ -192,7 +196,6 @@ if "bases" not in listdir():
     mkdir("bases")
 else:
     pass
-#    print(listdir(path="bases"))
 
 bases = listdir(path="bases")
 
@@ -219,16 +222,20 @@ if baze != "1" and baze != "0":
     with open("bases/" + bases[int(baze) - 2], "r") as f:
         custom = f.read().split()
         f.close()
+if baze == "0":
+    exit()
+
+modes = {"0": "Просто перепись позывных",
+"1":  "Позывной -> русская фонетическая азбука",
+"2": "Позывной -> международная фонетическая азбука",
+"3": "Русская фонетическая азбука -> позывной",
+"4": "Международная фонетическая азбука -> позывной"}
 
 print("Выберите режим:")
-print("0 - просто перепись позывных")
-print("1 - позывной -> русская фонетическая азбука")
-print("2 - позывной -> международная фонетическая азбука")
-print("3 - русская фонетическая азбука -> позывной")
-print("4 - международная фонетическая азбука -> позывной")
+[print(x, y, sep=" - ") for x, y in modes.items()]
 while True:
     mode = input()
-    if mode in "12340":
+    if mode in "12340" and mode != "":
         break
     else:
         print("Неправильный ввод")
@@ -236,7 +243,23 @@ while True:
 time_s = time()
 true = 0
 wrong = []
+
+print()
+print("Сколько раз повторять?")
+print("0 - бесконечность раз")
 while True:
+    count = input()
+    if count.isdigit() and count != "0":
+        iterator = range(int(count))
+        break
+    elif count == "0":
+        iterator = repeat(1)
+        break
+    else:
+        print("Неправильный ввод")
+print()
+
+for _ in iterator:
     time_start = time()
     if baze == "1":
         poz = "".join([choice("QWERTYUIOPASDFGHJKLZXCVBNM0123456789") for _ in range(randint(4, 6))])
@@ -272,28 +295,29 @@ while True:
         print(round(time() - time_start, 2), "секунд")
         true += 1
     elif answer == "0":
-        print()
-        print("Итого:")
-        if baze == "1":
-            print("База из случайных")
-        else:
-            print(bases[int(baze) - 2])
-        
-        print("Прошло:", round(time() - time_s, 2), "секунд")
-        print("Правильно:", true)
-        print("Неправильно:", len(wrong))
-        print("Правильных позывных в минуту:", round(true / ((time() - time_s) / 60), 2))
-        if true != 0:
-            print("В среднем на правильный позывной:", round((time() - time_s) / true, 2), "секунд")
-        else:
-            print("В среднем на правильный позывной: 0 секунд")
-        print()
-        [print(x, y, sep="\t") for x, y in wrong]
         break
     else:
         print("Неправильно")
         wrong.append((poz1, answer))
     print()
 
+print()
+print("Итого:")
+print(modes[mode])
+if baze == "1":
+    print("База из случайных")
+else:
+    print(bases[int(baze) - 2])
+
+print("Прошло:", round(time() - time_s, 2), "секунд")
+print("Правильно:", true)
+print("Неправильно:", len(wrong))
+print("Правильных позывных в минуту:", round(true / ((time() - time_s) / 60), 2))
+if true != 0:
+    print("В среднем на правильный позывной:", round((time() - time_s) / true, 2), "секунд")
+else:
+    print("В среднем на правильный позывной: 0 секунд")
+print()
+[print(x, y, sep="\t") for x, y in wrong]
 print()
 input("Enter чтобы выйти")    
