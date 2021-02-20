@@ -3,10 +3,42 @@ from time import time
 from os import listdir, mkdir
 from itertools import repeat
 from sys import exit
-from dict import *
+from dicti import *
+import requests
 
 version = 1.0
 type_of = "terminal"
+
+
+def update():
+	print("Проверка обновлений")
+	try:
+		upd = requests.get('https://raw.githubusercontent.com/MaksPV/PhysicalOS/master/last_version.txt')
+        upd_info = upd.text.splitlines()
+        upd_vers = float(upd_info[0])
+
+		if upd_vers > version:
+            print(f"""Найдено обновление
+{upd_info[0]}
+Изменения:
+{'\n'.join(upd_info[1:])}
+Обновить?
+1 - Да, 2 - Нет""")
+			menu = input()
+			if menu == "1":
+				new_vers = requests.get('https://raw.githubusercontent.com/MaksPV/PhysicalOS/master/PhyOS.py')
+				with open("RadioTrainer.exe", "wb") as f:
+    				f.write(new_vers.content)
+    				f.close()
+    				return "exit"
+		elif upd_vers == version:
+            print("Установлена последняя версия, вы прекрасны")
+		elif upd_vers < version:
+            print("Не хочешь попасть в команду RadioTrainer?")
+		else:
+            print("Ошибка, файл обновлений не найден")
+	except BaseException:
+		print("Нет интернета, попробуйте позже")
 
 
 def encode_to_RusPhonk(text):
@@ -56,6 +88,9 @@ def encode_to_dopust(text):
 
 if "bases" not in listdir():
     mkdir("bases")
+    with open("bases/База из контеста.txt", "w") as f:
+        f.write(contest)
+        f.close()
 else:
     pass
 
@@ -65,15 +100,16 @@ print("""  _               ___
  |_)  _.  _| o  _  | ._ _. o ._   _  ._ 
  | \ (_| (_| | (_) | | (_| | | | (/_ |  
                                         """)
-print(f"Версия: {str(version)}")
-print("Накалякал t.me/maksimushka для себя и товарищей из UG5R")
-print("большими буквами необязательно писать, 0 - выход")
-print()
-print("Какую базу?")
-print("")
-print("0 - выйти")
-print("1 - случайно генерируемая")
+print(f"""Версия: {str(version)}
+Накалякал t.me/maksimushka для себя и товарищей из UG5R
+Большими буквами необязательно писать""")
+
+print("""Какую базу?
+
+0 - Выйти
+1 - Случайно генерируемая""")
 [print(i + 2, bases[i], sep=" - ") for i in range(len(bases))]
+
 while True:
     baze = input()
     try:
@@ -111,9 +147,10 @@ time_s = time()
 true = 0
 wrong = []
 
-print()
-print("Сколько раз повторять?")
-print("0 - бесконечность раз")
+print("""
+Сколько раз повторять?
+0 - бесконечность раз""")
+
 while True:
     count = input()
     if count.isdigit() and count != "0":
@@ -171,20 +208,24 @@ for _ in iterator:
 print()
 print("Итого:")
 print(modes[mode])
+
 if baze == "1":
     print("База из случайных")
 else:
     print(bases[int(baze) - 2])
 
-print("Прошло:", round(time() - time_s, 2), "секунд")
-print("Правильно:", true)
-print("Неправильно:", len(wrong))
-print("Правильных позывных в минуту:", round(true / ((time() - time_s) / 60), 2))
+print(f"""Прошло: {round(time() - time_s, 2)} секунд
+Правильно: {true}
+Неправильно: {len(wrong)}
+Правильных позывных в минуту: {round(true / ((time() - time_s) / 60), 2)}""")
+                               
 if true != 0:
     print("В среднем на правильный позывной:", round((time() - time_s) / true, 2), "секунд")
 else:
     print("В среднем на правильный позывной: 0 секунд")
+
 print()
 [print(x, y, sep="\t") for x, y in wrong]
 print()
+
 input("Enter чтобы выйти")    
