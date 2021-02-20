@@ -1,6 +1,7 @@
 import requests
 from os import mkdir
 
+print("Загрузка")
 mkdir("files")
 with open("files/RadioTrainer.exe", "wb") as f:
     file = requests.get('https://raw.githubusercontent.com/MaksPV/RadioTrainer/main/dist/files/RadioTrainer.exe')
