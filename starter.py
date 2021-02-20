@@ -29,6 +29,10 @@ try:
             with open("files/RadioTrainer.exe", "wb") as f:
                 f.write(new_vers.content)
                 f.close()
+            new_last = requests.get('https://raw.githubusercontent.com/MaksPV/RadioTrainer/main/dist/files/last_version.txt')
+            with open("files/last_version.txt", "wb") as f:
+                f.write(new_last.content)
+                f.close()
     elif upd_vers == now_vers:
         print("Установлена последняя версия, вы прекрасны")
     elif upd_vers < now_vers:
@@ -39,3 +43,4 @@ except BaseException:
     print("Нет интернета, попробуйте позже")
 
 subprocess.call("files/RadioTrainer.exe")
+input()
