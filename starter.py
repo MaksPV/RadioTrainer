@@ -43,4 +43,3 @@ except BaseException:
     print("Нет интернета, попробуйте позже")
 
 subprocess.call("files/RadioTrainer.exe")
-input()
