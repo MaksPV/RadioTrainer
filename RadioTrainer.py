@@ -6,9 +6,14 @@ from sys import exit
 from dicti import *
 
 
-with open("files/last_version.txt", "r") as f:
-        now = f.read().splitlines()
-        version = float(now[0])
+attention = False
+try: 
+    with open("files/last_version.txt", "r") as f:
+            now = f.read().splitlines()
+            version = float(now[0])
+except:
+    version = 0.00
+    attention = True
 
 
 def encode_to_RusPhonk(text):
@@ -56,6 +61,12 @@ def encode_to_dopust(text):
     return " ".join(res)
 
 
+def generator():
+    poz = choice("ABCDEFGHIJKLMNOPRSTUVWXYZ")
+    for _ in range(randint(3, 5)):
+        poz += choice("QWERTYUIOPASDFGHJKLZXCVBNM0123456789")
+    return poz
+
 if "bases" not in listdir():
     mkdir("bases")
     with open("bases/База из контеста.txt", "w") as f:
@@ -74,6 +85,11 @@ print(f"""Версия: {str(version)}
 Накалякал t.me/maksimushka для себя и товарищей из UG5R
 Большими буквами необязательно писать""")
 
+if attention:
+    print()
+    print("!Вы используете версию без автообновления!")
+    print("!Скачайте правильную версию на https://github.com/MaksPV/RadioTrainer/releases!")
+    print()
 print("""Какую базу?
 
 0 - Выйти
@@ -136,7 +152,7 @@ print()
 for _ in iterator:
     time_start = time()
     if baze == "1":
-        poz = "".join([choice("QWERTYUIOPASDFGHJKLZXCVBNM0123456789") for _ in range(randint(4, 6))])
+        poz = generator()
     elif baze == "0":
         break
     else:
