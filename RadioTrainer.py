@@ -67,6 +67,34 @@ def generator():
         poz += choice("QWERTYUIOPASDFGHJKLZXCVBNM0123456789")
     return poz
 
+
+def rus_generator():
+    regions = {
+        "0": "CDFEIJKLMNQZXABHOSRTUVWY",
+        "1": "ABCDNOPQRSTWZ",
+        "2": "FKABCDHEGILMNPOQRSUVWXYZT",
+        "3": "ABCDFHEGILMNPKOQRSUVWXYZT",
+        "4": "ABFHILMNPQRSTUWYZ",
+        "5": "ABCDFHEGILMNPKOQRSUVWXYZ",
+        "6": "ABCDILMNUYEHFGJPRQWX",
+        "7": "ABCDILMNUYEHFGJPRQWX",
+        "8": "XFGSTWABCDJKLQRHIMNOPUVYZ",
+        "9": "XFGSTWABCDJKLQRHIMNOPUVYZ"
+        }
+    
+    poz = choice("UR")
+    if poz == "U":
+        poz += choice("ABCDFGHI")
+    else:
+        poz += choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    poz += choice("1234567890")
+    poz += choice(regions[poz[-1]])
+    
+    for _ in range(randint(0, 2)):
+        poz += choice("QWERTYUIOPASDFGHJKLZXCVBNM")
+    return poz
+
+
 if "bases" not in listdir():
     mkdir("bases")
     with open("bases/База из контеста.txt", "w") as f:
@@ -93,13 +121,15 @@ if attention:
 print("""Какую базу?
 
 0 - Выйти
-1 - Случайно генерируемая""")
-[print(i + 2, bases[i], sep=" - ") for i in range(len(bases))]
+1 - Случайно генерируемая
+2 - Случайно генерируемые русские позывные""")
+[print(i + 3, bases[i], sep=" - ") for i in range(len(bases))]
 
 while True:
     baze = input()
     try:
-        if 0 <= int(baze) - 2 <= len(bases) - 1 or baze == "1" or baze == "0":
+        if 0 <= int(baze) - 3 <= len(bases) - 1 or baze == "2" or baze == "1" \
+                or baze == "0":
             break
         else:
             print("Неправильный ввод")
@@ -107,8 +137,8 @@ while True:
         print("Неправильный ввод")
 print()
 
-if baze != "1" and baze != "0":
-    with open("bases/" + bases[int(baze) - 2], "r") as f:
+if baze != "2" and baze != "1" and baze != "0":
+    with open("bases/" + bases[int(baze) - 3], "r") as f:
         custom = f.read().split()
         f.close()
 if baze == "0":
@@ -153,6 +183,8 @@ for _ in iterator:
     time_start = time()
     if baze == "1":
         poz = generator()
+    if baze == "2":
+        poz = rus_generator()
     elif baze == "0":
         break
     else:
@@ -197,6 +229,8 @@ print(modes[mode])
 
 if baze == "1":
     print("База из случайных")
+elif baze == "2":
+    print("База из случайных русских")
 else:
     print(bases[int(baze) - 2])
 
